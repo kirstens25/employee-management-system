@@ -1,7 +1,6 @@
-const chalk = require('chalk');
+
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
-const figlet = require("figlet");
 require('dotenv').config();
 
 
@@ -9,13 +8,11 @@ require('dotenv').config();
 
 const connection = mysql.createConnection(
     {
-        host:process.env.DB_HOST,
-        port: process.env.PORT || 3001,
-        user: process.env.DB_USER,
-        password: provess.env.DB_PASSWORD,
-        database: provess.env.DB_DATABASE,
+        host: process.env.DB_HOST || "localhost",
+        user: process.env.DB_USER || "root",
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE,
         multipleStatements: true,
-
     },
     console.log("Connected to employee_cms database")
 );
@@ -23,19 +20,21 @@ const connection = mysql.createConnection(
 connection.connect((err) => {
     if (err) throw err;
 
-    console.table(chalk.blue("Welcome to the Employee Management System"));
-
+    console.table("Welcome to the Employee Management System");
+    
     badCompany();
 });
 
 const askNewEmployee = [
-    "What is the first name?",
-    "What is the last name?",
+    "What is the first name of the new employee?",
+    "What is their last name?",
     "What is their role?",
     "Who is their manager?",
 ];
 
-const roleQuery = `SELECT * FROM roles; SELECT CONCAT (first_name, " ",last_name) AS full_name FROM employees`;
+const roleQuery = 
+    `SELECT * FROM roles; SELECT CONCAT(first_name,'',last_name) AS full_name FROM employees;`;
+
 const allStaff = `SELECT * FROM employees`;
 
 const badCompany = () => {

@@ -1,11 +1,11 @@
-ROP DATABASE IF EXISTS employees_cms;
+DROP DATABASE IF EXISTS employees_cms;
 CREATE DATABASE employees_cms;
 
-USE employees_cms
+USE employees_cms;
 
 CREATE TABLE departments (
   id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(45) NULL,
+  department_name VARCHAR(45) NULL,
   PRIMARY KEY (id)
   );
 

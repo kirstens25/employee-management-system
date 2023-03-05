@@ -27,7 +27,6 @@ const askNewEmployee = [
     "What is the first name of the new employee?",
     "What is their last name?",
     "What is their role?",
-    "Who is their manager?",
 ];
 
 const roleQuery = 
@@ -84,18 +83,6 @@ const badCompany = () => {
                 case "Update employee roles":
                     updateEmpRole();
                     break;
-
-                case "Delete department":
-                    deleteDepartment();
-                    break; 
-
-                case "Delete role":
-                    deleteRole();
-                    break;
-                
-                case "Delete employee":
-                    deleteEmployee();
-                    break;  
 
                 default:
                     console.log(`Invalid action: ${answer.action}`);
@@ -164,19 +151,19 @@ const addDepartment = () => {
             },
            
             message: askNewEmployee[2],
-          },
-          {
-            name: "manager",
-            type: "list",
-            // A FX that creates a new array from employee table, the concatenated first and last name
-            // and returns an array of the full name
-            choices: function () {
-              let choiceArr = results[1].map((choice) => choice.full_name);
-              return choiceArr;
-            },
-            // asking who is their manager
-            message: askNewEmployee[3],
-          },
+          }
+        //   {
+        //     name: "manager",
+        //     type: "list",
+        //     // A FX that creates a new array from employee table, the concatenated first and last name
+        //     // and returns an array of the full name
+        //     choices: function () {
+        //       let choiceArr = results[1].map((choice) => choice.full_name);
+        //       return choiceArr;
+        //     },
+        //     // asking who is their manager
+        //     message: askNewEmployee[3],
+        //   },
         ])
         .then((answer) => {
           connection.query(
@@ -291,82 +278,4 @@ const addDepartment = () => {
       .catch((err) => {
         throw err;
       });
-  };
-
-  const deleteDepartment = () => {
-    const query = "SELECT * FROM departments";
-    connection.query(query, (err, results) => {
-      if (err) throw err;
-      inquirer
-        .prompt([
-          {
-            name: "dept",
-            type: "list",
-            // make a new array and loop through, return each item ie.(department)
-            choices: function () {
-              let choiceArr = results.map((choice) => choice.department_name);
-              return choiceArr;
-            },
-            // pick the array item to be deleted
-            message: "Choose the department to be deleted:",
-          },
-        ])
-        .then((answer) => {
-          connection.query(`DELETE FROM department WHERE ?`, {
-            name: answer.dept,
-          });
-          badCompany();
-        });
-    });
-  };
-  
-  const deleteRole = () => {
-    query = "SELECT * FROM roles;";
-    connection.query(query, (err, results) => {
-      if (err) throw err;
-  
-      inquirer
-        .prompt([
-          {
-            name: "removeRole",
-            type: "list",
-            choices: function () {
-              let choiceArr = results.map((choice) => choice.title);
-              return choiceArr;
-            },
-  
-            message: "Which role would you like to delete?",
-          },
-        ])
-        .then((answer) => {
-          connection.query(`DELETE FROM roles WHERE ?`, {
-            title: answer.removeRole,
-          });
-          badCompany();
-        });
-    });
-  };
-
-  const deleteEmployee = () => {
-    connection.query(allStaff, (err, results) => {
-      if (err) throw err;
-  
-      
-      console.table(results);
-  
-      inquirer
-        .prompt([
-          {
-            name: "removeID",
-            type: "input",
-            message: "Enter the Employee ID of the person to be removed:",
-          },
-        ])
-        .then((answer) => {
-          connection.query(`DELETE FROM employees WHERE ?`, {
-            id: answer.removeID,
-          });
-          badCompany();
-        });
-    });
   };

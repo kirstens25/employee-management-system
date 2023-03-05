@@ -1,11 +1,9 @@
-
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 require('dotenv').config();
 
 
 // connect to mysql db
-
 const connection = mysql.createConnection(
     {
         host: process.env.DB_HOST || "localhost",
@@ -116,7 +114,7 @@ const addDepartment = () => {
   
       console.table(results);
   
-      // ask what the name is for the new 
+      // ask what the name is for the new department
       inquirer
         .prompt([
           {
